@@ -1,11 +1,10 @@
 import express from "express";
+import authRouter from "./routes/authRouter.js";
 
 const app = express();
 
-app.get("/", (req, res) => {
-  res.json({
-    message: "Endpoint is working !!!",
-  });
-});
+app.use(express.json());
+
+app.use("/api/v1/auth", authRouter);
 
 export default app;
