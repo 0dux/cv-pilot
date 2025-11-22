@@ -1,12 +1,17 @@
 import mongoose from "mongoose";
 
-const connectDB = async() => {
+const connectDB = async () => {
   try {
-    await mongoose.connect(process.env["MONGO_URI"] || "No url passed!!!");
+    //get uri
+    const MONGO_URI = process.env["MONGO_URI"];
+    if (!MONGO_URI) throw new Error("MONGO_URI not recieved!!!");
+
+    //connect db
+    await mongoose.connect(MONGO_URI);
     console.log(`Database Connected Succesfully!!!✅ `);
   } catch (error) {
     console.log(`Some error has occured!!!❌
-error::${error}`);
+    error::${error}`);
   }
 };
 
