@@ -17,7 +17,10 @@ export const registerUser = async (req: Request, res: Response) => {
     //validate data sent
     const result = registerUserData.safeParse(userData);
     if (!result.success) {
-      res.status(400).json({ message: "Invalid data passed !!!" });
+      res.status(400).json({
+        message: "Invalid data passed !!!",
+        errors: result.error.issues,
+      });
       return;
     }
 
@@ -33,7 +36,10 @@ export const registerUser = async (req: Request, res: Response) => {
       return;
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await bcrypt.hash(
+      password,
+      parseInt(process.env["BCRYPT_ROUNDS"] || "10")
+    );
     //create new user
     const newUser = await User.create({
       name: name,
@@ -67,6 +73,7 @@ export const loginUser = async (req: Request, res: Response) => {
     if (!result.success) {
       res.status(400).json({
         message: "Invalid data passed!!!",
+        errors: result.error.issues,
       });
       return;
     }
