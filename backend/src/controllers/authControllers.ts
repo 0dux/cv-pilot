@@ -1,5 +1,5 @@
+import bcrypt from "bcrypt";
 import type { Request, Response } from "express";
-import jwt from "jsonwebtoken";
 import { User } from "../db/db.js";
 import {
   loginUserData,
@@ -7,6 +7,7 @@ import {
   type LoginUserData,
   type RegisterUserData,
 } from "../types/schema.js";
+import { signToken } from "../utils/jwt.js";
 
 //Register a new user
 export const registerUser = async (req: Request, res: Response) => {
@@ -32,27 +33,27 @@ export const registerUser = async (req: Request, res: Response) => {
       return;
     }
 
+    const hashedPassword = await bcrypt.hash(password, 10);
     //create new user
     const newUser = await User.create({
       name: name,
       email: email,
-      password: password,
+      password: hashedPassword,
     });
 
-    const secret = process.env["JWT_SECRET"];
-    if (!secret) throw new Error("JWT_SECRET not recieved!!!");
+    const token = signToken({ userId: newUser._id });
 
-    const token = jwt.sign({ userId: newUser._id }, secret, {
-      expiresIn: "2 days",
-    });
-
-    res.json({
+    res.status(201).json({
       message: "User registered succesfully!!!",
       token,
     });
     return;
   } catch (error) {
-    console.log(error);
+    console.error(`Register user error: ${error}`);
+    res.status(500).json({
+      message: "Internal server error!!!",
+    });
+    return;
   }
 };
 
@@ -72,33 +73,38 @@ export const loginUser = async (req: Request, res: Response) => {
 
     const { email, password } = result.data;
 
-    if (!(await User.findOne({ email }))) {
-      res.status(409).json({
+    const userFound = await User.findOne({ email });
+
+    if (!userFound) {
+      res.status(401).json({
         message: "User with this email doesn't exists!!!",
       });
       return;
     }
 
-    const userFound = await User.findOne({ email, password });
-    console.log(userFound);
-    if (!userFound) {
-      res.status(400).json({
+    const hashedPassword = userFound.password;
+
+    const match = await bcrypt.compare(password, hashedPassword);
+
+    if (!match) {
+      res.status(401).json({
         message: "Email or password is incorrect!!!",
       });
       return;
     }
 
-    const secret = process.env["JWT_SECRET"];
-    if (!secret) throw new Error("JWT_SECRET not recieved!!!");
+    const token = signToken({ userId: userFound._id });
 
-    const token = jwt.sign({ userId: userFound._id }, secret);
-
-    res.json({
+    res.status(200).json({
       message: "Logged in succesfully!!!",
       token,
     });
     return;
   } catch (error) {
-    console.log(error);
+    console.error(`Login user error:${error}`);
+    res.status(500).json({
+      message: "Internal server error!!!",
+    });
+    return;
   }
 };
