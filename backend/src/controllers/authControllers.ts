@@ -21,7 +21,7 @@ export const registerUser = async (req: Request, res: Response) => {
         message: "Invalid data passed !!!",
         errors: result.error.issues,
       });
-      return;
+      return;//at every response it is important to return - to let the program know to finish
     }
 
     //destructure the data

@@ -1,10 +1,9 @@
-import dotenv from "dotenv";
 import express from "express";
 import authRouter from "./routes/authRouter.js";
 
 import connectDB from "./config/config.js";
+import uploadRouter from "./routes/uploadRouter.js";
 
-dotenv.config();
 const app = express();
 
 //dependencies
@@ -15,5 +14,7 @@ connectDB();
 
 //routes
 app.use("/api/v1/auth", authRouter);
+app.use("/api/v1/upload", uploadRouter);
+
 
 export default app;

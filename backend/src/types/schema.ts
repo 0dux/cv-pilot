@@ -1,4 +1,4 @@
-import z, { email } from "zod";
+import z from "zod";
 
 export const registerUserData = z.object({
   name: z.string().min(3),
