@@ -1,5 +1,5 @@
 //created a helper function for getting multiple env vairables at once
-export const getEnv = (envArray: string[]): Record<string, string> => {
+export const getEnv = <T extends string>(envArray: T[]): Record<T, string> => {
   //passing an array of names of env variables I want
   const missing = envArray.filter((key) => !process.env[key]); //will return an array of env that are not caught
 
@@ -13,6 +13,5 @@ export const getEnv = (envArray: string[]): Record<string, string> => {
   console.log(`✅ ${envArray.length} validated`);
 
   const entries = envArray.map((key) => [key, process.env[key]]);
-  const objectFormat = Object.fromEntries(entries);
-  return objectFormat;
+  return Object.fromEntries(entries) as Record<T, string>;
 };
