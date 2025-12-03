@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { upload } from "../middleware/multer.js";
-import { uploader } from "../integrations/cloudinary.js";
+import { cloudinaryUploader } from "../integrations/cloudinary.js";
 
 //router for upload related routes
 const uploadRouter = Router();
@@ -22,7 +22,7 @@ uploadRouter.post("/test", upload.single("test"), async (req, res) => {
   }
 
   const cloudinaryUploadResult = await new Promise((resolve, reject) => {
-    uploader
+    cloudinaryUploader
       .upload_stream({ public_id: fileName }, (error, uploaded) => {
         if (error) {
           console.log("----->", error);

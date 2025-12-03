@@ -30,4 +30,4 @@ cloudinary.config({
 // console.log(cloudinary.config());
 
 //initializing cloudinary uploader
-export const uploader = cloudinary.uploader;
+export const cloudinaryUploader = cloudinary.uploader;
