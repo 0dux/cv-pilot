@@ -11,7 +11,7 @@ const storage = multer.memoryStorage();
 const upload = multer({
   storage,
 });
-
+// finally starting with integrating gemini api
 //using a special helper function created to get the required env variables
 const {
   CLOUDINARY_CLOUD_NAME,
