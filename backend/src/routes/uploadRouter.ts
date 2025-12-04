@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { upload } from "../middleware/multer.js";
-import { cloudinaryUploader } from "../integrations/cloudinary.js";
+import cloudinaryUploader from "../integrations/cloudinary.js";
+import handleAnalysisGemini from "../integrations/gemini.js";
 
 //router for upload related routes
 const uploadRouter = Router();
@@ -14,28 +15,18 @@ uploadRouter.post("/test", upload.single("test"), async (req, res) => {
     });
     throw new Error("No file uploaded!!");
   }
-  const fileName = file.originalname as string;
-  const fileBuffer = file.buffer as Buffer;
+  const fileName: string = file.originalname;
+  const fileBuffer: Buffer = file.buffer;
   if (!fileBuffer) {
     console.error("No file was uploaded!!!");
     return;
   }
 
-  const cloudinaryUploadResult = await new Promise((resolve, reject) => {
-    cloudinaryUploader
-      .upload_stream({ public_id: fileName }, (error, uploaded) => {
-        if (error) {
-          console.log("----->", error);
-          return reject(error);
-        }
-        console.log("----->", uploaded);
-        return resolve(uploaded);
-      })
-      .end(fileBuffer);
-  });
-
+  const cloudinaryUploadResponse = await cloudinaryUploader(fileName, fileBuffer);
+  const geminiAnalysisResponse = await handleAnalysisGemini(fileBuffer);
   res.json({
-    cloudinaryUploadResult,
+    cloudinaryUploadResponse,
+    geminiAnalysisResponse,
     text,
     message: "Upload succesfull!!",
   });
