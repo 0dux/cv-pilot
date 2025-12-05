@@ -33,7 +33,7 @@ const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
     req.payload = payload as JwtPayload;
     next();
   } catch (error) {
-    console.error("You cuh!! here is some error nigga:", error);
+    console.error("Yoo cuh!! here is some error::", error);
     res.status(401).json({
       message: "Invalid or expired token.",
     });

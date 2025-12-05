@@ -1,4 +1,4 @@
-import { v2 as cloudinary } from "cloudinary"; // replacement for require("cloudinary").v2;
+import { v2 as cloudinary, type UploadApiResponse } from "cloudinary"; // replacement for require("cloudinary").v2;
 import { env } from "../config/env.js";
 //deleted the generic type function for env retrieval
 cloudinary.config({
@@ -8,22 +8,26 @@ cloudinary.config({
   secure: true,
 });
 
+export interface CloudinaryUploadResult extends UploadApiResponse {
+  //this is actuall amazing.
+  asset_id: string;
+}
 // initializing cloudinary uploader
-const cloudinaryUploader = async (fileName: string, fileBuffer: Buffer) =>
-  await new Promise((resolve, reject) => {
+const handleCloudinaryUpload = async (fileName: string, fileBuffer: Buffer) =>
+  await new Promise<CloudinaryUploadResult>((resolve, reject) => {
     cloudinary.uploader
       .upload_stream(
         { resource_type: "auto", public_id: fileName, folder: "resume" },
         (error, uploaded) => {
           if (error) {
-            console.error("----->", error);
+            console.error("error -----> ", error);
             return reject(error);
           }
-          console.log("----->", uploaded);
-          return resolve(uploaded);
+          // console.log("----->", uploaded);
+          return resolve(uploaded as CloudinaryUploadResult);
         }
       )
       .end(fileBuffer);
   });
 
-export default cloudinaryUploader;
+export default handleCloudinaryUpload;

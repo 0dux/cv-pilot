@@ -7,19 +7,18 @@ const resumeSchema = new mongoose.Schema({
     required: true,
     index: true,
   },
-  assetId: {
+  asset_id: {
     type: String,
     required: true,
-    unique: true,
     trim: true,
   },
-  cloudinaryUrl: {
+  cloudinary_url: {
     type: String,
     required: true,
     trim: true,
   },
   analysis: {
-    type: mongoose.Schema.Types.Mixed,
+    type: mongoose.Schema.Types.Mixed, //basically allows you to store any type of data
     default: null,
   },
 });

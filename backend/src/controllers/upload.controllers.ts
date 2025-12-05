@@ -1,13 +1,14 @@
-import cloudinaryUploader from "../integrations/cloudinary.js";
+import type { UploadApiResponse } from "cloudinary";
+import handleCloudinaryUpload from "../integrations/cloudinary.js";
 import handleAnalysisGemini from "../integrations/gemini.js";
 import type { Request, Response } from "express";
+import Resume from "../db/resumes.db.js";
 
 export const uploadAndAnalyzeResume = async (req: Request, res: Response) => {
   const text = req.body.test;
   const file = req.file;
-  console.log(file);
-
-  console.log(req.payload);
+  // console.log(file);
+  // console.log(req.payload);
 
   //check if recieved any file
   if (!file) {
@@ -23,7 +24,7 @@ export const uploadAndAnalyzeResume = async (req: Request, res: Response) => {
   const mimeType = file.mimetype;
 
   //upload file to cloudinary
-  const cloudinaryUploadResponse = await cloudinaryUploader(
+  const cloudinaryUploadResponse = await handleCloudinaryUpload(
     fileName,
     fileBuffer
   );
@@ -33,11 +34,38 @@ export const uploadAndAnalyzeResume = async (req: Request, res: Response) => {
     fileBuffer,
     mimeType
   );
+  //gather info for resume document
+  const { userId } = req.payload;
+  const { asset_id, url } = cloudinaryUploadResponse;
+  const analysis = geminiAnalysisResponse?.text;
+
+  // console.log(userId);
+  // console.log(asset_id, url);
+  // console.log(analysis);
+
+  const resumeCount = await Resume.countDocuments({ userId });
+  console.log(resumeCount);
+  
+
+  if (resumeCount > 3) {
+    res.status(401).json({
+      message:
+        "Too many files uploaded, limit exceeded only 5 files allowed per user!!!",
+    });
+    return;
+  }
+  const resumeAnalysisSaved = await Resume.create({
+    userId,
+    asset_id,
+    cloudinary_url: url,
+    analysis,
+  });
 
   //respond with the feedback
   res.json({
+    resumeAnalysisSaved,
     cloudinaryUploadResponse,
-    geminiAnalysisResponse,
+    analysis,
     text,
     message: "Upload succesfull!!",
   });

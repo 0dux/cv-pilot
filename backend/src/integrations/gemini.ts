@@ -29,7 +29,7 @@ async function handleAnalysisGemini(fileBuffer: Buffer, mimeType: string) {
       model: "gemini-2.5-flash",
       contents: contents,
     });
-    console.log(response.text);
+    // console.log(response.text);
     return response;
   } catch (error) {
     console.error("Error generating content :::", error);
