@@ -13,7 +13,7 @@ const cloudinaryUploader = async (fileName: string, fileBuffer: Buffer) =>
   await new Promise((resolve, reject) => {
     cloudinary.uploader
       .upload_stream(
-        { public_id: fileName, folder: "resume" },
+        { resource_type: "auto", public_id: fileName, folder: "resume" },
         (error, uploaded) => {
           if (error) {
             console.error("----->", error);

@@ -1,6 +1,6 @@
 import bcrypt from "bcrypt";
 import type { Request, Response } from "express";
-import { User } from "../db/user.db.js";
+import User from "../db/user.db.js";
 import {
   loginUserData,
   registerUserData,
@@ -21,7 +21,7 @@ export const registerUser = async (req: Request, res: Response) => {
         message: "Invalid data passed !!!",
         errors: result.error.issues,
       });
-      return;//at every response it is important to return - to let the program know to finish
+      return; //at every response it is important to return - to let the program know to finish
     }
 
     //destructure the data

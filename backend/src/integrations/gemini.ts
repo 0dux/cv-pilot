@@ -1,31 +1,40 @@
 import { GoogleGenAI } from "@google/genai";
-import "dotenv/config"; //remove on deployment
+import "dotenv/config";
 import { env } from "../config/env.js";
 
 const ai = new GoogleGenAI({
   apiKey: env.GEMINI_API_KEY,
 });
 
-async function handleAnalysisGemini(fileBuffer: Buffer) {
-  const pdfResp = fileBuffer;
+async function handleAnalysisGemini(fileBuffer: Buffer, mimeType: string) {
+  const file = fileBuffer;
 
   const contents = [
-    { text: "What do you read in this document" },
     {
-      inlineData: {
-        mimeType: "application/pdf",
-        data: Buffer.from(pdfResp).toString("base64"),
-      },
+      role: "user",
+      parts: [
+        { text: "What do you read in this document" },
+        {
+          inlineData: {
+            mimeType: mimeType,
+            data: Buffer.from(file).toString("base64"),
+          },
+        },
+      ],
     },
   ];
 
-  const response = await ai.models.generateContent({
-    model: "gemini-2.5-flash",
-    contents: contents,
-  });
-  console.log(response);
-  
-  return response;
+  try {
+    const response = await ai.models.generateContent({
+      model: "gemini-2.5-flash",
+      contents: contents,
+    });
+    console.log(response.text);
+    return response;
+  } catch (error) {
+    console.error("Error generating content :::", error);
+    return;
+  }
 }
 
-export default handleAnalysisGemini
+export default handleAnalysisGemini;
