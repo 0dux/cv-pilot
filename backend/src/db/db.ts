@@ -24,6 +24,9 @@ const userSchema = new mongoose.Schema(
       required: true,
       minlength: 8,
     },
+    resumes:{
+      
+    }
   },
   {
     timestamps: true,
