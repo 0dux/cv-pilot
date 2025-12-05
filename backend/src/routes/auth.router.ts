@@ -1,7 +1,7 @@
 import type { Response, Request } from "express";
 import { Router } from "express";
-import { loginUser, registerUser } from "../controllers/authControllers.js";
-import authMiddleware from "../middleware/authMiddleware.js";
+import { loginUser, registerUser } from "../controllers/auth.controllers.js";
+import authMiddleware from "../middleware/auth.middleware.js";
 
 const authRouter = Router();
 

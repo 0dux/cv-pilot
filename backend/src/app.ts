@@ -1,8 +1,8 @@
 import express from "express";
-import authRouter from "./routes/authRouter.js";
+import authRouter from "./routes/auth.router.js";
 
 import connectDB from "./config/config.js";
-import uploadRouter from "./routes/uploadRouter.js";
+import uploadRouter from "./routes/upload.router.js";
 
 const app = express();
 

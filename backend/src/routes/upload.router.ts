@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { upload } from "../middleware/multer.js";
+import { upload } from "../middleware/multer.middleware.js";
 import cloudinaryUploader from "../integrations/cloudinary.js";
 import handleAnalysisGemini from "../integrations/gemini.js";
 

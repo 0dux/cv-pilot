@@ -1,6 +1,6 @@
 import bcrypt from "bcrypt";
 import type { Request, Response } from "express";
-import { User } from "../db/db.js";
+import { User } from "../db/user.db.js";
 import {
   loginUserData,
   registerUserData,
