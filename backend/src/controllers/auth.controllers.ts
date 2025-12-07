@@ -6,7 +6,7 @@ import {
   registerUserData,
   type LoginUserData,
   type RegisterUserData,
-} from "../types/schema.js";
+} from "../types/schema.type.js";
 import { signToken } from "../utils/jwt.js";
 
 //Register a new user

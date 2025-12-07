@@ -1,6 +1,6 @@
 import type { UploadApiResponse } from "cloudinary";
-import handleCloudinaryUpload from "../integrations/cloudinary.js";
-import handleAnalysisGemini from "../integrations/gemini.js";
+import handleCloudinaryUpload from "../integrations/cloudinary.integration.js";
+import handleAnalysisGemini from "../integrations/gemini.integration.js";
 import type { Request, Response } from "express";
 import Resume from "../db/resumes.db.js";
 

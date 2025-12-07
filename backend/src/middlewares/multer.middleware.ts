@@ -9,7 +9,7 @@ const allowed = [
   "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
 ];
 
-const maxLimit = 2 * 1024 * 1024;
+const maxSizeLimit = 2 * 1024 * 1024;
 //multer setup
 const storage = multer.memoryStorage(); //store in memory, as I don't want to keep those files for more time than they need to be
 
@@ -23,7 +23,7 @@ export const upload = multer({
     }
 
     //check for the file size
-    if (file.size >= maxLimit) {
+    if (file.size >= maxSizeLimit) {
       return callback(new Error("File size limit exceeded"));
     }
     callback(null, true);
