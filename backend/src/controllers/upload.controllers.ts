@@ -1,8 +1,7 @@
-import type { UploadApiResponse } from "cloudinary";
-import handleCloudinaryUpload from "../integrations/cloudinary.integration.js";
-import handleAnalysisGemini from "../integrations/gemini.integration.js";
 import type { Request, Response } from "express";
 import Resume from "../db/resumes.db.js";
+import handleCloudinaryUpload from "../integrations/cloudinary.integration.js";
+import handleAnalysisGemini from "../integrations/gemini.integration.js";
 
 export const uploadAndAnalyzeResume = async (req: Request, res: Response) => {
   try {
