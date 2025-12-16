@@ -7,7 +7,7 @@ const resumeSchema = new mongoose.Schema({
     required: true,
     index: true,
   },
-  asset_id: {
+  resume_id: {
     type: String,
     required: true,
     trim: true,

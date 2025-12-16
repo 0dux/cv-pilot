@@ -7,6 +7,8 @@ export const uploadAndAnalyzeResume = async (req: Request, res: Response) => {
   try {
     const text = req.body.test;
     const file = req.file;
+    const { userId } = req.payload;
+
     // console.log(file);
     // console.log(req.payload);
 
@@ -14,6 +16,16 @@ export const uploadAndAnalyzeResume = async (req: Request, res: Response) => {
     if (!file) {
       res.json({
         message: "No file was uploaded !!!",
+      });
+      return;
+    }
+    //check if the user has exceeded usage
+    const resumeCount = await Resume.countDocuments({ userId });
+
+    if (resumeCount > 5) {
+      res.status(401).json({
+        message:
+          "Too many files uploaded, limit exceeded only 5 files allowed per user!!!",
       });
       return;
     }
@@ -35,27 +47,18 @@ export const uploadAndAnalyzeResume = async (req: Request, res: Response) => {
       mimeType
     );
     //gather info for resume document
-    const { userId } = req.payload;
     const { asset_id, url } = cloudinaryUploadResponse;
     const analysis = geminiAnalysisResponse?.text;
 
     // console.log(userId);
     // console.log(asset_id, url);
     // console.log(analysis);
+    // console.log(resumeCount);
 
-    const resumeCount = await Resume.countDocuments({ userId });
-    console.log(resumeCount);
-
-    if (resumeCount > 3) {
-      res.status(401).json({
-        message:
-          "Too many files uploaded, limit exceeded only 5 files allowed per user!!!",
-      });
-      return;
-    }
+    //save the analysis to the db
     const resumeAnalysisSaved = await Resume.create({
       userId,
-      asset_id,
+      resume_id: asset_id,
       cloudinary_url: url,
       analysis,
     });
