@@ -56,7 +56,7 @@ export const uploadAndAnalyzeResume = async (req: Request, res: Response) => {
     // console.log(resumeCount);
 
     //save the analysis to the db
-    const resumeAnalysisSaved = await Resume.create({
+    const resumeAnalyIsSaved = await Resume.create({
       userId,
       resume_id: asset_id,
       cloudinary_url: url,
@@ -65,7 +65,7 @@ export const uploadAndAnalyzeResume = async (req: Request, res: Response) => {
 
     //respond with the feedback
     res.json({
-      resumeAnalysisSaved,
+      resume_id: asset_id,
       cloudinaryUploadResponse,
       analysis,
       text,

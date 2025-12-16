@@ -18,20 +18,26 @@ export const registerUser = async (req: Request, res: Response) => {
     const result = registerUserData.safeParse(userData);
     if (!result.success) {
       res.status(400).json({
-        message: "Invalid data passed !!!",
-        errors: result.error.issues,
+        success: false,
+        data: {
+          message: "Invalid data passed !!!",
+          errors: result.error.issues,
+        },
       });
       return; //at every response it is important to return - to let the program know to finish
     }
 
-    //destructure the data
+    //deconstruct the data
     const { name, email, password } = result.data;
 
     //check if the user with that email already exists
-    if (await User.findOne({ email: email })) {
+    if (await User.findOne({ email })) {
       //dont use "find" here as it'll always be truthy because of [] even empty array is considered true.
       res.status(409).json({
-        message: "User with this email already exists!!!",
+        success: false,
+        data: {
+          message: "User with this email already exists!!!",
+        },
       });
       return;
     }
@@ -42,22 +48,28 @@ export const registerUser = async (req: Request, res: Response) => {
     );
     //create new user
     const newUser = await User.create({
-      name: name,
-      email: email,
+      name,
+      email,
       password: hashedPassword,
     });
 
     const token = signToken({ userId: newUser._id });
 
     res.status(201).json({
-      message: "User registered succesfully!!!",
-      token,
+      success: true,
+      data: {
+        message: "User registered succesfully!!!",
+        token,
+      },
     });
     return;
   } catch (error) {
     console.error(`Register user error: ${error}`);
     res.status(500).json({
-      message: "Internal server error!!!",
+      success: false,
+      data: {
+        message: "Internal server error!!!",
+      },
     });
     return;
   }
@@ -72,8 +84,11 @@ export const loginUser = async (req: Request, res: Response) => {
     const result = loginUserData.safeParse(loginData);
     if (!result.success) {
       res.status(400).json({
-        message: "Invalid data passed!!!",
-        errors: result.error.issues,
+        success: false,
+        data: {
+          message: "Invalid data passed!!!",
+          errors: result.error.issues,
+        },
       });
       return;
     }
@@ -84,7 +99,10 @@ export const loginUser = async (req: Request, res: Response) => {
 
     if (!userFound) {
       res.status(401).json({
-        message: "User with this email doesn't exists!!!",
+        success: false,
+        data: {
+          message: "User with this email doesn't exists!!!",
+        },
       });
       return;
     }
@@ -95,7 +113,10 @@ export const loginUser = async (req: Request, res: Response) => {
 
     if (!match) {
       res.status(401).json({
-        message: "Email or password is incorrect!!!",
+        success: false,
+        data: {
+          message: "Email or password is incorrect!!!",
+        },
       });
       return;
     }
@@ -103,14 +124,20 @@ export const loginUser = async (req: Request, res: Response) => {
     const token = signToken({ userId: userFound._id });
 
     res.status(200).json({
-      message: "Logged in succesfully!!!",
-      token,
+      success: true,
+      data: {
+        message: "Logged in succesfully!!!",
+        token,
+      },
     });
     return;
   } catch (error) {
     console.error(`Login user error:${error}`);
     res.status(500).json({
-      message: "Internal server error!!!",
+      success: false,
+      data: {
+        message: "Internal server error!!!",
+      },
     });
     return;
   }
