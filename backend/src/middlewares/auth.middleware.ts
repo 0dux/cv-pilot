@@ -19,22 +19,29 @@ const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
     const authorizationHeader = req.headers["authorization"]; //dont keep on forgetting that in express the header are expected in smallCase.
     if (!authorizationHeader) {
       res.status(401).json({
-        message: "No authorization headere passed !!!",
+        success: false,
+        data: {
+          message: "No authorization headere passed !!!",
+        },
       });
       return;
     }
 
     const parts = authorizationHeader.split(" ");
-    if (parts.length !== 2 || parts[0] !== "Bearer") {//better approach that handles header invalidity in a much wider range.
+    if (parts.length !== 2 || parts[0] !== "Bearer") {
+      //better approach that handles header invalidity in a much wider range.
       res.status(401).json({
-        message: "Invalid authorization header format.",
+        success: false,
+        data: {
+          message: "Invalid authorization header format.",
+        },
       });
       return;
     }
 
     const token = parts[1];
     const payload = verifyToken(token as string); //I don't need !verified token part as it'll throw incase there is some error.
-    
+
     // console.log(payload);
 
     req.payload = payload as JwtPayload;
@@ -42,7 +49,10 @@ const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
   } catch (error) {
     console.error("Yoo cuh!! here is some error::", error);
     res.status(401).json({
-      message: "Invalid or expired token.",
+      success: false,
+      data: {
+        message: "Invalid or expired token.",
+      },
     });
   }
 };

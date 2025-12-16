@@ -2,7 +2,7 @@ import express from "express";
 import authRouter from "./routes/auth.router.js";
 
 import connectDB from "./config/config.js";
-import uploadRouter from "./routes/upload.router.js";
+import resumeRouter from "./routes/resume.router.js";
 
 const app = express();
 
@@ -14,7 +14,7 @@ connectDB();
 
 //routes
 app.use("/api/v1/auth", authRouter);
-app.use("/api/v1/upload", uploadRouter);
+app.use("/api/v1/resume", resumeRouter);
 
 
 export default app;
