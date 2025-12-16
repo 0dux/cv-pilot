@@ -65,7 +65,8 @@ export const uploadAndAnalyzeResume = async (req: Request, res: Response) => {
 
     //respond with the feedback
     res.json({
-      resume_id: asset_id,
+      resume_id: resumeAnalyIsSaved.resume_id,
+      resumeAnalyIsSaved,
       cloudinaryUploadResponse,
       analysis,
       text,
