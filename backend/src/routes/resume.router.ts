@@ -10,14 +10,16 @@ import { upload } from "../middlewares/multer.middleware.js";
 //router for upload related routes
 const resumeRouter = Router();
 
+//get resumes
+resumeRouter.get("/all", authMiddleware, handleGetAllResume);
+resumeRouter.get("/:resumeId", authMiddleware, handleGetSingleResume);
+
+//resume upload and analyse route
 resumeRouter.post(
   "/upload-analyse",
   authMiddleware,
   upload.single("resume_form"),
   uploadAndAnalyzeResume
 );
-
-resumeRouter.get("/all", authMiddleware, handleGetAllResume);
-resumeRouter.get("/:resumeId", authMiddleware, handleGetSingleResume);
 
 export default resumeRouter;
