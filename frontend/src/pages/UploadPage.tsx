@@ -1,6 +1,6 @@
 
 const UploadPage = () => {
-  return <div>UploadPage</div>;
+  return <div>Upload Page</div>;
 };
 
 export default UploadPage;
