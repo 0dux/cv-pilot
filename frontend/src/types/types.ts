@@ -9,7 +9,7 @@ export const registerUserData = z.object({
 export type RegisterUserData = z.infer<typeof registerUserData>;
 
 export const loginUserData = z.object({
-  email: z.email().min(3),
+  email: z.email(),
   password: z.string().min(6),
 });
 

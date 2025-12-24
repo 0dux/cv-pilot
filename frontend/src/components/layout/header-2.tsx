@@ -1,9 +1,8 @@
-"use client";
-import React from "react";
-import { Button, buttonVariants } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
 import { MenuToggleIcon } from "@/components/menu-toggle-icon";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { useScroll } from "@/components/use-scroll";
+import { cn } from "@/lib/utils";
+import React from "react";
 
 export function Header({ isSignedIn = false }: { isSignedIn?: boolean }) {
   const [open, setOpen] = React.useState(false);
@@ -64,7 +63,7 @@ export function Header({ isSignedIn = false }: { isSignedIn?: boolean }) {
           <Button variant="outline">
             {isSignedIn ? "Log-out" : "Sign In"}
           </Button>
-          <Button>Analze Resume</Button>
+          <Button>Analyze Resume</Button>
         </div>
         <Button
           size="icon"
@@ -105,7 +104,7 @@ export function Header({ isSignedIn = false }: { isSignedIn?: boolean }) {
           </div>
           <div className="flex flex-col gap-2">
             <Button variant="outline" className="w-full">
-              Sign In
+              {isSignedIn ? "Log-out" : "Sign In"}
             </Button>
             <Button className="w-full">Get Started</Button>
           </div>

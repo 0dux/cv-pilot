@@ -4,7 +4,7 @@ import LandingPage from "./pages/LandingPage";
 import SignInPage from "./pages/SignInPage";
 import SignUpPage from "./pages/SignUpPage";
 import UploadPage from "./pages/UploadPage";
-import { Header } from "./components/header-2";
+import { Header } from "./components/layout/header-2";
 
 const App = () => {
   return (
